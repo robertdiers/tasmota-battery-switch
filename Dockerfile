@@ -3,7 +3,7 @@ FROM docker.io/ubuntu:24.04
 RUN apt update
 RUN apt -y upgrade
 RUN apt -y install gcc cron python3 python3-pip libpq-dev python3-dev python3-pip
-RUN pip install paho-mqtt --break-system-packages
+RUN pip install paho-mqtt requests --break-system-packages
 
 # copy files
 COPY python /app/python
