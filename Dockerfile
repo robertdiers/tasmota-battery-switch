@@ -1,10 +1,9 @@
-FROM docker.io/debian:stable-slim
+FROM docker.io/ubuntu:24.04
 
 RUN apt update
 RUN apt -y upgrade
-RUN apt -y install gcc cron python3 python3-pip python3-venv libpq-dev python3-dev
-RUN python3 -m venv ~/.local --system-site-packages
-RUN ~/.local/bin/pip install configparser paho-mqtt
+RUN apt -y install gcc cron python3 python3-pip libpq-dev python3-dev python3-pip
+RUN pip install paho-mqtt --break-system-packages
 
 # copy files
 COPY python /app/python
