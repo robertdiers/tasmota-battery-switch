@@ -23,11 +23,11 @@ if __name__ == "__main__":
         if soc >= batteryon:
             for name in conf["mqtt_names"].split(','):
                 print('ON ' + name)
-                Tasmota.on(conf["mqtt_name"])
+                Tasmota.on(name)
         if soc <= batteryoff:
             for name in conf["mqtt_names"].split(','):
                 print('OFF ' + name)
-                Tasmota.off(conf["mqtt_name"])
+                Tasmota.off(name)
         #if soc >= 0:
         #    for name in conf["mqtt_names"].split(','):
         #        print('TEST ' + name)
