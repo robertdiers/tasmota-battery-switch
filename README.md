@@ -20,7 +20,7 @@ MQTT_NAMES (default: tasmota_nous_2,tasmota_nous_3,tasmota_nous_4)
 
 BATTERY_ON (default: 100)
 
-BATTERY_OFF (default: 50)
+BATTERY_OFF (default: 40)
 
 SEMS_USER (default: myid)
 
