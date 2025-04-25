@@ -22,13 +22,9 @@ BATTERY_ON (default: 100)
 
 BATTERY_OFF (default: 60)
 
-SEMS_USER (default: myid)
+GOODWE_IP (default: 192.168.1.120)
 
-SEMS_PASSWORD (default: password)
-
-SEMS_STATIONID (default: mystation)
-
-docker run -d --restart always -e MQTT_BROKER=192.168.1.108 -e MQTT_PASSWORD=password --name tasmotabatteryswitch ghcr.io/robertdiers/tasmota-battery-switch:1.4
+docker run -d --restart always -e MQTT_BROKER=192.168.1.108 -e MQTT_PASSWORD=password --name tasmotabatteryswitch ghcr.io/robertdiers/tasmota-battery-switch:1.5
 
 ### create Docker image for your architecture
 ./image.sh

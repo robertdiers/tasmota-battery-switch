@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import time
-from datetime import datetime
+import asyncio
 
-import Goodwe
+import Goodwe_Local
 import Tasmota
 import Config
 
@@ -18,24 +17,7 @@ if __name__ == "__main__":
         Tasmota.connect(conf["mqtt_broker"], conf["mqtt_port"], conf["mqtt_user"], conf["mqtt_password"])
 
         # read Goodwe
-        res = Goodwe.read(conf["sems_user"], conf["sems_password"], conf["sems_stationid"])
-        soc = int(res["soc"].strip('%'))
-
-        if soc >= batteryon:
-            for name in conf["mqtt_names"].split(','):
-                print('ON ' + name)
-                Tasmota.on(name)
-                time.sleep(15)
-        if soc <= batteryoff:
-            for name in conf["mqtt_names"].split(','):
-                print('OFF ' + name)
-                Tasmota.off(name)
-                time.sleep(15)
-        # if soc >= 0:
-        #    for name in conf["mqtt_names"].split(','):
-        #        print('TEST ' + name)
-
-        print(datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " actualsoc: " + res["soc"])
+        asyncio.run(Goodwe_Local.Goodwe.get_runtime_data(conf["goodwe_ip"], batteryon, batteryoff, conf["mqtt_names"]))
 
         # print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " END #####")
 

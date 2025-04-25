@@ -9,26 +9,30 @@ client = "unknown"
 searchattributes = []
 valueattributes = {}
 
+
 def on(name):
     try:
         topic = "cmnd/" + name + "/Power"
-        #print(topic)
+        # print(topic)
         global client
         client.publish(topic, "ON")
     except Exception as ex:
-        print ("ERROR Tasmota: ", ex) 
+        print("ERROR Tasmota: ", ex)
+
 
 def off(name):
     try:
         topic = "cmnd/" + name + "/Power"
-        #print(topic)
+        # print(topic)
         global client
         client.publish(topic, "OFF")
     except Exception as ex:
-        print ("ERROR Tasmota: ", ex) 
+        print("ERROR Tasmota: ", ex)
+
 
 def flatten_json(y):
     out = {}
+
     def flatten(x, name=''):
         if type(x) is dict:
             for a in x:
@@ -43,52 +47,55 @@ def flatten_json(y):
     flatten(y)
     return out
 
+
 def on_message(client, userdata, message):
     global searchattributes
     content = str(message.payload.decode("utf-8"))
-    #print(content)
+    # print(content)
     json_object = flatten_json(json.loads(content))
-    #print(json_object)
+    # print(json_object)
     valueattributes_tmp = {}
     for attribute in searchattributes:
         if attribute in json_object:
             valueattributes_tmp[attribute] = json_object[attribute]
         else:
             valueattributes_tmp[attribute] = "n/a"
-    #assign only once
+    # assign only once
     global valueattributes
     valueattributes = valueattributes_tmp
+
 
 def get(name, statusnumber, attributes):
     try:
         topic = "cmnd/" + name + "/Status"
         topicstat = "stat/" + name + "/#"
-        #print(topic)
+        # print(topic)
         global client
         global searchattributes
         global valueattributes
         searchattributes = attributes
         valueattributes = {}
-        client.on_message=on_message
+        client.on_message = on_message
         client.subscribe(topicstat)
         client.loop_start()
-        #send status request to tasmota
+        # send status request to tasmota
         client.publish(topic, statusnumber)
         counter = 0
-        #wait max 10 sec
-        while len(valueattributes) == 0 and counter < 100:
+        # wait max 20 sec
+        while len(valueattributes) == 0 and counter < 200:
             counter = counter + 1
             time.sleep(0.1)
         client.loop_stop()
         client.unsubscribe(topicstat)
-        #print(valueattributes)
+        # print(valueattributes)
         return valueattributes
     except Exception as ex:
-        print ("ERROR Tasmota: ", ex) 
+        print("ERROR Tasmota: ", ex)
+
 
 def connect(mqtt_broker, mqtt_port, mqtt_user, mqtt_password):
     try:
-        
+
         client_id = 'battery-switch-tasmota-'+socket.gethostname()
 
         # Set Connecting Client ID
@@ -96,6 +103,6 @@ def connect(mqtt_broker, mqtt_port, mqtt_user, mqtt_password):
         client = mqtt_client.Client(mqtt_client.CallbackAPIVersion.VERSION1, client_id)
         client.username_pw_set(mqtt_user, mqtt_password)
         client.connect(mqtt_broker, mqtt_port)
- 
+
     except Exception as ex:
-        print ("ERROR Tasmota: ", ex)    
+        print("ERROR Tasmota: ", ex)
