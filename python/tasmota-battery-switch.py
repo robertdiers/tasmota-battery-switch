@@ -6,7 +6,7 @@ import Goodwe_Local
 import Tasmota
 import Config
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     # print (datetime.now().strftime("%d/%m/%Y %H:%M:%S") + " START #####")
     try:
         conf = Config.read()
